@@ -46,7 +46,7 @@ class pstuFAQTaxonomy extends pstuFAQAbstractObject {
 
 
 	public function register() {
-		register_taxonomy( $this->name, array(), $this->args );
+		register_taxonomy( $this->name, [ 'faq' ], $this->args );
 	}
 
 
