@@ -186,12 +186,14 @@ class Manager {
 		$this->loader->add_filter( $this->get_plugin_name() . '_settings-tabs', $class_post_type_faq, 'add_settings_tab', 10, 2 );
 		$this->loader->add_action( $this->get_plugin_name() . '_settings-form_' . $class_post_type_faq->get_post_type_name(), $class_post_type_faq, 'render_settings_form', 10, 1 );
 
-		// таксономия "Научный совет"
+		// таксономия "Категория вопрооса"
 		$class_taxonomy_faq_category = new PartAdminTaxonomyFAQCategory( $this->get_plugin_name(), $this->get_version() );
 		$this->loader->add_action( 'add_meta_boxes', $class_taxonomy_faq_category, 'add_meta_box', 10, 1 );
 		$this->loader->add_action( 'save_post', $class_taxonomy_faq_category, 'set_object_terms', 10, 2 );
-		$this->loader->add_action( 'create_' . $class_taxonomy_faq_category->get_taxonomy_name(), $class_taxonomy_faq_category, 'save_term_fields', 10, 1 );
-		$this->loader->add_action( 'edited_' . $class_taxonomy_faq_category->get_taxonomy_name(), $class_taxonomy_faq_category, 'save_term_fields', 10, 1 );
+		$this->loader->add_action( $class_taxonomy_faq_category->get_taxonomy_name() . '_add_form_fields', $class_taxonomy_faq_category, 'add_term_meta_fields', 10, 1 );
+		$this->loader->add_action( $class_taxonomy_faq_category->get_taxonomy_name() . '_edit_form_fields', $class_taxonomy_faq_category, 'edit_term_meta_fields', 10, 1 );
+		$this->loader->add_action( 'create_' . $class_taxonomy_faq_category->get_taxonomy_name(), $class_taxonomy_faq_category, 'save_term_meta_fields', 10, 1 );
+		$this->loader->add_action( 'edited_' . $class_taxonomy_faq_category->get_taxonomy_name(), $class_taxonomy_faq_category, 'save_term_meta_fields', 10, 1 );
 		$this->loader->add_action( 'manage_edit-' . $class_taxonomy_faq_category->get_taxonomy_name() . '_columns', $class_taxonomy_faq_category, 'add_columns', 10, 1 );
 		$this->loader->add_action( 'manage_' . $class_taxonomy_faq_category->get_taxonomy_name() . '_custom_column', $class_taxonomy_faq_category, 'render_custom_columns', 10, 3 );
 
@@ -221,23 +223,27 @@ class Manager {
 		// тип поста "Вопросы-ответы"
 		$class_post_type_faq = new PartPublicPostTypeFAQ( $this->get_plugin_name(), $this->get_version() );
 		$this->loader->add_filter( 'template_include', $class_post_type_faq, 'choosing_template_to_include', 10, 1 );
-		$this->loader->add_action( $class_post_type_faq->get_post_type_name() . '_loop', $class_post_type_faq, 'include_post_loop_template', 10, 0 );
 		$this->loader->add_action( $class_post_type_faq->get_post_type_name() . '_post_loop', $class_post_type_faq, 'include_post_loop_template', 10, 0 );
 		$this->loader->add_action( $class_post_type_faq->get_post_type_name() . '_before_main_content', $class_post_type_faq, 'before_main_content', 10, 0 );
-		$this->loader->add_action( $class_post_type_faq->get_post_type_name() . '_after_main_content', $class_post_type_faq, 'after_main_content', 10, 0 );
-		$this->loader->add_action( $class_post_type_faq->get_post_type_name() . '_before_loop', $class_post_type_faq, 'include_taxonomies_list', 10, 0 );
-		$this->loader->add_action( $class_post_type_faq->get_post_type_name() . '_before_loop', $class_post_type_faq, 'before_list_wrap', 20, 0 );
-		$this->loader->add_action( $class_post_type_faq->get_post_type_name() . '_after_loop', $class_post_type_faq, 'after_list_wrap', 20, 0 );
-		
+		$this->loader->add_action( $class_post_type_faq->get_post_type_name() . '_after_main_content', $class_post_type_faq, 'after_main_content', 50, 0 );
+		$this->loader->add_action( $class_post_type_faq->get_post_type_name() . '_before_main_content', $class_post_type_faq, 'render_archive_heading', 20, 0 );
+		$this->loader->add_action( $class_post_type_faq->get_post_type_name() . '_before_main_content', $class_post_type_faq, 'include_taxonomies_list', 25, 0 );
+		$this->loader->add_action( $class_post_type_faq->get_post_type_name() . '_before_main_content', $class_post_type_faq, 'include_pagination', 20, 0 );
+		$this->loader->add_action( $class_post_type_faq->get_post_type_name() . '_before_loop', $class_post_type_faq, 'before_list_wrap', 25, 0 );
+		$this->loader->add_action( $class_post_type_faq->get_post_type_name() . '_after_loop', $class_post_type_faq, 'after_list_wrap', 25, 0 );
+		$this->loader->add_filter( 'pre_get_posts', $class_post_type_faq, 'set_posts_per_archive_page', 10, 1 );
+
 		// таксономия "Категори вопросов-ответов"
 		$class_taxonomy_faq_category = new PartPublicTaxonomyFAQCategory( $this->get_plugin_name(), $this->get_version() );
 		$this->loader->add_filter( 'template_include', $class_taxonomy_faq_category, 'choosing_template_to_include', 10, 1 );
 		$this->loader->add_shortcode( $class_taxonomy_faq_category->get_part_name() . '_list_of_posts', $class_taxonomy_faq_category, 'shortode_manager', 10, 3 );
-		$this->loader->add_action( 'taxonomy-' . $class_taxonomy_faq_category->get_taxonomy_name() . '-terms_before', $class_taxonomy_faq_category, 'terms_before', 10, 0 );
-		$this->loader->add_action( $class_taxonomy_faq_category->get_taxonomy_name() . '-render_term', $class_taxonomy_faq_category, 'render_term', 10, 1 );
-		$this->loader->add_action( 'taxonomy-' . $class_taxonomy_faq_category->get_taxonomy_name() . '-terms_after' . '-render_term', $class_taxonomy_faq_category, 'terms_after', 10, 0 );
+		$this->loader->add_shortcode( $class_taxonomy_faq_category->get_part_name() . '_question_form', $class_taxonomy_faq_category, 'shortode_manager', 10, 3 );
 		$this->loader->add_filter( $class_taxonomy_faq_category->get_taxonomy_name() . '_logo', $class_taxonomy_faq_category, 'get_default_logo', 10, 2 );
-
+		$this->loader->add_action( 'taxonomy-' . $class_taxonomy_faq_category->get_taxonomy_name() . '-terms_list-before_loop', $class_taxonomy_faq_category, 'before_terms_list_wrap', 10, 0 );
+		$this->loader->add_action( 'taxonomy-' . $class_taxonomy_faq_category->get_taxonomy_name() . '-terms_list-item', $class_taxonomy_faq_category, 'terms_list_item', 10, 1 );
+		$this->loader->add_action( 'taxonomy-' . $class_taxonomy_faq_category->get_taxonomy_name() . '-terms_list-after_loop', $class_taxonomy_faq_category, 'after_terms_list_wrap', 10, 0 );
+		$this->loader->add_action( 'taxonomy-' . $class_taxonomy_faq_category->get_taxonomy_name() . '-terms_list-after_loop', $class_taxonomy_faq_category, 'include_question_form', 15, 0 );
+		$this->loader->add_action( 'template_redirect', $class_taxonomy_faq_category, 'question_form_run', 10, 0 );	
 	}
 
 

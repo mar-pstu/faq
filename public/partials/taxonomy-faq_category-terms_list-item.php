@@ -15,7 +15,7 @@ $term_logo_url = apply_filters( 'faq_category_logo', get_term_meta( $term, 'logo
 
 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 	
-	<section id="faq_category-<?php echo $term->term_id; ?>" class="faq_category-term" role="listitem">
+	<div id="faq_category-<?php echo $term->term_id; ?>" class="faq_category-term mt-3 mb-3" role="listitem">
 		
 		<div class="row middle-xs">
 			
@@ -34,6 +34,6 @@ $term_logo_url = apply_filters( 'faq_category_logo', get_term_meta( $term, 'logo
 
 		</div>
 
-	</section>
+	</div>
 
 </div>

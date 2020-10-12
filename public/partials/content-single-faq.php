@@ -19,7 +19,13 @@ do_action( 'faq_before_single_post' );
 		<h1><?php the_title( '', '', true ); ?></h1>
 
 
-		<?php the_content(); ?>
+		<?php
+
+			the_content();
+
+			comments_template();
+
+		?>
 
 
 	</article>

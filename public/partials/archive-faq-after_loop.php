@@ -11,3 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {	exit; };
 
 
 </ul>
+
+
+<?php
+
+
+the_posts_pagination();

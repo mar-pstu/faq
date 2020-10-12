@@ -115,14 +115,14 @@ class PartAdminTaxonomyFAQCategory extends PartTaxonomyFAQCategory {
 	 * Сохрание дополнительных метаполей для термина
 	 * @param    int    $term_id    идентификатор текущего терма
 	 */
-	public function save_term_fields( $term_id ) {
+	public function save_term_meta_fields( $term_id ) {
 		if ( ! current_user_can( 'edit_term', $term_id ) ) return;
 		if (
 			( isset( $_POST[ '_wpnonce' ] ) && ! wp_verify_nonce( $_POST[ '_wpnonce' ], "update-tag_$term_id" ) ) ||
 			( isset( $_POST[ '_wpnonce_add-tag' ] ) && ! wp_verify_nonce( $_POST[ '_wpnonce_add-tag' ], "add-tag" ) )
 		) return;
-		foreach ( $this->taxonomy_meta_fields as $name => $label ) {
-			$new_value = ( isset( $_REQUEST[ $name ] ) ) ? $this->sanitize_taxonomy_meta_fields( $name, $_REQUEST[ $name ] ) : '';
+		foreach ( $this->meta_fields as $name => $label ) {
+			$new_value = ( isset( $_REQUEST[ $name ] ) ) ? $this->sanitize_term_meta_fields( $name, $_REQUEST[ $name ] ) : '';
 			if ( empty( $new_value ) ) {
 				delete_term_meta( $term_id, $name );
 			} else {
@@ -133,16 +133,67 @@ class PartAdminTaxonomyFAQCategory extends PartTaxonomyFAQCategory {
 
 
 	/**
-	 * Проверка и очистка дополнительных метаполей
+	 * Метод добавления пользовательского мета поля на страницу добавления нового термина
+	 * таксономии "Статус конкурсной работы"
+	 * @param    string    $taxonomy_name     идентификатор таксономии
+	 */
+	public function add_term_meta_fields( $taxonomy_name ) {
+		foreach ( $this->meta_fields as $name => $label ) {
+			$id = "{$this->part_name}_{$name}";
+			$control = '';
+			switch ( $name ) {
+				case 'mail_for_questions':
+					$control = Control::render_input( 'text', [
+						'value' => '',
+						'id'    => $id,
+						'class' =>'regular-text',
+						'name'  => $name,
+					] );
+					break;
+			}
+			include dirname( __FILE__ ) . '/partials/taxonomy-add-form-field.php';
+		}
+	}
+
+
+	/**
+	 * Метод добавления пользовательского мета поля на страницу редактирования нового термина
+	 * таксономии "Статус конкурсной работы"
+	 * @param    WP_Term   $term     текущий объект таксономии
+	 */
+	public function edit_term_meta_fields( $term ) {
+		foreach ( $this->meta_fields as $name => $label ) {
+			$id = "{$this->part_name}_{$name}";
+			$control = '';
+			$value = get_term_meta( $term->term_id, $name, true );
+			switch ( $name ) {
+				case 'mail_for_questions':
+					$control = Control::render_input( 'text', [
+						'value' => $value,
+						'id'    => $id,
+						'class' =>'regular-text',
+						'name'  => $name,
+					] );
+					break;
+			}
+			include dirname( __FILE__ ) . '/partials/taxonomy-edit-form-field.php';
+		}
+	}
+
+
+	/**
+	 * Проверка полученного мета-поля перед сохранением в базу
+	 * @since    1.0.0
 	 * @var      string    $key      Идентификатор поля
 	 * @var      string    $value    Новое значение металополя
-	 * */
-	function sanitize_taxonomy_meta_fields( $key, $value ) {
-		$result = '';
+	 */
+	protected function sanitize_term_meta_fields( $key, $value ) {
 		switch ( $key ) {
-			case 'color_bg':
-			case 'color_text':
-				$result = sanitize_hex_color( $value );
+			case 'mail_for_questions':
+				$result = Control::parse_email_list( $value );
+				break;
+			default:
+				$result = sanitize_text_field( $value );
 				break;
 		}
 		return apply_filters( "sanitize_{$this->taxonomy_name}_taxonomy_meta_fields", $result, $key, $value );
@@ -175,6 +226,8 @@ class PartAdminTaxonomyFAQCategory extends PartTaxonomyFAQCategory {
 		}
 		return $content;
 	}
+
+
 
 
 }

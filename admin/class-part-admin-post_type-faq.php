@@ -38,6 +38,7 @@ class PartAdminPostTypeFAQ extends PartPostTypeFAQ {
 		register_setting( $this->post_type_name, $this->post_type_name, [ $this, 'sanitize_setting_callback' ] );
 		add_settings_section( 'archive', __( 'Архив', $this->plugin_name ), [ $this, 'render_section_info' ], $this->post_type_name ); 
 		add_settings_field( 'archive_description', __( 'Описание', $this->plugin_name ), [ $this, 'render_setting_field'], $this->post_type_name, 'archive', 'archive_description' );
+		add_settings_field( 'posts_per_archive_page', __( 'Количество постов на странице архива', $this->plugin_name ), [ $this, 'render_setting_field'], $this->post_type_name, 'archive', 'posts_per_archive_page' );
 		add_settings_section( 'main_content', __( 'Контейнер', $this->plugin_name ), [ $this, 'render_section_info' ], $this->post_type_name ); 
 		add_settings_field( 'before_main_content', __( 'Код перед основным контейнером', $this->plugin_name ), [ $this, 'render_setting_field'], $this->post_type_name, 'main_content', 'before_main_content' );
 		add_settings_field( 'after_main_content', __( 'Код после основного контейнера', $this->plugin_name ), [ $this, 'render_setting_field'], $this->post_type_name, 'main_content', 'after_main_content' );
@@ -81,6 +82,22 @@ class PartAdminPostTypeFAQ extends PartPostTypeFAQ {
 	public function render_setting_field( $id ) {
 		$name = "{$this->post_type_name}[{$id}]";
 		switch ( $id ) {
+			case 'posts_per_archive_page':
+				echo Control::create_control(
+					$this->plugin_name,
+					$this->version,
+					'number',
+					[
+						'atts'  => [
+							'class' => 'form-control',
+							'value' => $this->post_type_option[ $id ],
+							'id'    => $id,
+							'name'  => $name,
+							'min'   => '1',
+						],
+					]
+				);
+				break;
 			case 'before_main_content':
 			case 'after_main_content':
 				echo Control::create_control(
@@ -128,6 +145,9 @@ class PartAdminPostTypeFAQ extends PartPostTypeFAQ {
 		foreach ( $options as $name => &$value ) {
 			$new_value = null;
 			switch ( $name ) {
+				case 'posts_per_archive_page':
+					$new_value = absint( $value );
+					break;
 				case 'before_main_content':
 				case 'after_main_content':
 				case 'archive_description':

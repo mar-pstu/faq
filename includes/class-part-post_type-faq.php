@@ -35,6 +35,7 @@ class PartPostTypeFAQ extends PostType {
 			'archive_description' => '',
 			'before_main_content' => '',
 			'after_main_content'  => '',
+			'posts_per_archive_page' => 10,
 		] );
 	}
 

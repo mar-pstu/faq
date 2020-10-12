@@ -1,0 +1,229 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2020-10-12 14:17+0300\n"
+"PO-Revision-Date: 2020-10-12 14:44+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Poedit-KeywordsList: __;_e;esc_attr__;esc_attr_e\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: .git\n"
+
+#: admin/class-part-admin-post_type-faq.php:39
+msgid "Архив"
+msgstr "Архів"
+
+#: admin/class-part-admin-post_type-faq.php:40
+msgid "Описание"
+msgstr "Опис"
+
+#: admin/class-part-admin-post_type-faq.php:41
+msgid "Количество постов на странице архива"
+msgstr "Кількість постів на сторінці архіву"
+
+#: admin/class-part-admin-post_type-faq.php:42
+msgid "Контейнер"
+msgstr "Контейнер"
+
+#: admin/class-part-admin-post_type-faq.php:43
+msgid "Код перед основным контейнером"
+msgstr "Код перед основним контейнером"
+
+#: admin/class-part-admin-post_type-faq.php:44
+msgid "Код после основного контейнера"
+msgstr "Код після основного контейнера"
+
+#: admin/class-part-admin-readme_tab.php:35
+msgid "Справка"
+msgstr "Довідка"
+
+#: admin/class-part-admin-settings-manager.php:33
+#: admin/class-part-admin-settings-manager.php:34
+msgid "Настройки"
+msgstr "Налаштування"
+
+#: admin/class-part-admin-taxonomy-faq_category.php:109
+msgid "Сначала заполните таксономию!"
+msgstr "Спочатку заповніть таксономию!"
+
+#: admin/class-part-admin-taxonomy-faq_category.php:210
+msgid "ID"
+msgstr "ID"
+
+#: includes/class-activator.php:41
+msgid "Редактор вопросов-ответов"
+msgstr "Редактор питань-відповідей"
+
+#: includes/class-control.php:201
+msgid "Выбрать изображения"
+msgstr "Вибрати зображення"
+
+#: includes/class-control.php:211
+msgid "Удалить"
+msgstr "Видалити"
+
+#: includes/class-control.php:253
+msgid "Добавить строку"
+msgstr "Додати рядок"
+
+#: includes/class-control.php:260
+msgid "Удалить строку"
+msgstr "Видалити рядок"
+
+#: includes/class-part-post_type-faq.php:49
+#: includes/class-part-post_type-faq.php:50
+#: includes/class-part-post_type-faq.php:60
+msgid "Вопросы-ответы"
+msgstr "Питання-відповіді"
+
+#: includes/class-part-post_type-faq.php:51
+msgid "Добавить новую"
+msgstr "Додати нову"
+
+#: includes/class-part-post_type-faq.php:52
+msgid "Добавить новый вопрос"
+msgstr "Додати нове питання"
+
+#: includes/class-part-post_type-faq.php:53
+msgid "Редактировать вопрос"
+msgstr "Редагувати питання"
+
+#: includes/class-part-post_type-faq.php:54
+msgid "Новый вопрос"
+msgstr "Нове запитання"
+
+#: includes/class-part-post_type-faq.php:55
+msgid "Посмотреть вопросы-овтеты"
+msgstr "Подивитися питання-відповіді"
+
+#: includes/class-part-post_type-faq.php:56
+#: includes/class-part-taxonomy-faq_category.php:39
+msgid "Найти запись"
+msgstr "Знайти запис"
+
+#: includes/class-part-post_type-faq.php:57
+msgid "Записей не найдено"
+msgstr "Записів не знайдено"
+
+#: includes/class-part-post_type-faq.php:58
+msgid "В корзине ничего не найдено"
+msgstr "В кошику нічого не знайдено"
+
+#: includes/class-part-taxonomy-faq_category.php:25
+msgid "Email для вопросов"
+msgstr "Email для питань"
+
+#: includes/class-part-taxonomy-faq_category.php:37
+#: includes/class-part-taxonomy-faq_category.php:38
+msgid "Категория вопросов-ответов"
+msgstr "Категорія питань-відповідей"
+
+#: includes/class-part-taxonomy-faq_category.php:40
+msgid "Все категории"
+msgstr "Всі категорії"
+
+#: includes/class-part-taxonomy-faq_category.php:41
+msgid "Редагувати категорию"
+msgstr "Редагуваті категорію"
+
+#: includes/class-part-taxonomy-faq_category.php:42
+msgid "Обновить категорию"
+msgstr "Обновить категорию"
+
+#: includes/class-part-taxonomy-faq_category.php:43
+msgid "Добавить новую категорию"
+msgstr "Додати нову категорію"
+
+#: includes/class-part-taxonomy-faq_category.php:44
+msgid "Название научного совета"
+msgstr "Назва наукової ради"
+
+#: includes/class-part-taxonomy-faq_category.php:45
+msgid "Категории"
+msgstr "Категорії"
+
+#: public/class-part-public-taxonomy-faq_category.php:138
+msgid "Сообщение с сайта"
+msgstr "Повідомлення з сайту"
+
+#: public/class-part-public-taxonomy-faq_category.php:211
+msgid "Вопросы-ответы не добавлены"
+msgstr "Питання-відповіді не додано"
+
+#: public/partials/archive-faq-pagination.php:21
+msgid "Главная"
+msgstr "Головна"
+
+#: public/partials/question-form-success.php:14
+msgid "Спасибо! Ваше сообщение отправлено!"
+msgstr "Спасибі! Ваше повідомлення надіслано!"
+
+#: public/partials/question-form.php:32
+msgid "Обновите страницу и попробуйте ещё раз."
+msgstr "Оновлення сторінку і спробуйте ще раз."
+
+#: public/partials/question-form.php:35
+msgid "Введите Ваше имя"
+msgstr "Введіть Ваше ім'я"
+
+#: public/partials/question-form.php:38
+msgid "Введите Ваш email"
+msgstr "Введіть Ваш email"
+
+#: public/partials/question-form.php:41
+msgid "Выберите категорию вопроса"
+msgstr "Виберіть категорію питання"
+
+#: public/partials/question-form.php:44
+msgid "Задайте вопрос"
+msgstr "Задайте питання"
+
+#: public/partials/question-form.php:47
+msgid "Подозрение на спам! Обратитесь к администратору сайта!"
+msgstr "Підозра на спам! Зверніться до адміністратора сайту!"
+
+#: public/partials/question-form.php:50
+#, php-format
+msgid "Ошибка \"%s\": обратитесь к администратору!"
+msgstr "Помилка \"%s\": зверніться до адміністратора!"
+
+#: public/partials/question-form.php:69
+msgid "Ваше имя"
+msgstr "Ваше ім'я"
+
+#: public/partials/question-form.php:81
+msgid "Ваш email"
+msgstr "Ваш email"
+
+#: public/partials/question-form.php:93 public/partials/question-message.php:52
+msgid "Категория вопроса"
+msgstr "Категорія питання"
+
+#: public/partials/question-form.php:118
+#: public/partials/question-message.php:69
+msgid "Сообщение"
+msgstr "Повідомлення"
+
+#: public/partials/question-form.php:129
+msgid "Задать вопрос"
+msgstr "Задати питання"
+
+#: public/partials/question-message.php:20
+msgid "IP пользователя"
+msgstr "IP користувача"
+
+#: public/partials/question-message.php:31
+msgid "Имя пользователя"
+msgstr "Ім'я користувача"
+
+#: public/partials/question-message.php:42
+msgid "Email пользователя"
+msgstr "Email користувача"

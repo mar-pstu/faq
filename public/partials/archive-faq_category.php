@@ -21,8 +21,6 @@ if ( have_posts() ) {
 
 	?>
 
-	dgsdgdfg
-
 		<ul>
 
 	<?php
@@ -56,7 +54,7 @@ if ( have_posts() ) {
 }
 
 
-do_action( 'faq_before_main_content' );
+do_action( 'faq_after_main_content' );
 
 
 get_footer();

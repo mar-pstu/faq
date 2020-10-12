@@ -58,7 +58,7 @@ abstract class Part {
 	 * @since    2.0.0
 	 * @param    mixed      $var       переменная
 	 */
-	public function var_dump( $var ) {
+	public static function var_dump( $var ) {
 		echo "<pre>";
 		var_dump( $var );
 		echo "</pre>";
@@ -173,6 +173,23 @@ abstract class Part {
 			}
 		}
 		return ( $args[ 'container' ] ) ? "\n<style>\n" . $css . "\n</style>\n" : $css;
+	}
+
+
+	/**
+	 * Возвращает IP текущего пользователя
+	 * @return   string
+	 */
+	public static function get_user_ip() {
+		$user_ip = '';
+        if ( ! empty( $_SERVER[ 'HTTP_CLIENT_IP' ] ) ) {
+          $user_ip = $_SERVER[ 'HTTP_CLIENT_IP' ];
+        } elseif ( ! empty( $_SERVER[ 'HTTP_X_FORWARDED_FOR' ] ) ) {
+          $user_ip = $_SERVER[ 'HTTP_X_FORWARDED_FOR' ];
+        } else {
+          $user_ip = $_SERVER[ 'REMOTE_ADDR' ];
+        }
+        return $user_ip;
 	}
 
 

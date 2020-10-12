@@ -24,8 +24,6 @@ if ( have_posts() ) {
 		the_post();
 
 		do_action( 'faq_post_loop' );
-
-		include PartPublicPostTypeFAQ::get_template_file_path( 'content-faq.php' );
 		
 	}
 
@@ -41,7 +39,7 @@ if ( have_posts() ) {
 }
 
 
-do_action( 'faq_before_main_content' );
+do_action( 'faq_after_main_content' );
 
 
 get_footer();

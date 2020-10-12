@@ -21,7 +21,9 @@ class PartTaxonomyFAQCategory extends Taxonomy {
 		parent::__construct( $plugin_name, $version );
 		$this->part_name = 'faq_category';
 		$this->taxonomy_name = 'faq_category';
-		$this->meta_fields = [];
+		$this->meta_fields = [
+			'mail_for_questions'  => __( 'Email для вопросов' )
+		];
 		$this->part_option = array_merge( apply_filters( "{$plugin_name}-default_part_options", [
 			'description' => '',
 		], $this->part_name ), get_option( $this->part_name, [] ) );

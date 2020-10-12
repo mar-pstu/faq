@@ -7,21 +7,13 @@ namespace pstu_faq;
 if ( ! defined( 'ABSPATH' ) ) {	exit; };
 
 
-/**
- * Создаёт элементы формы и подключает необходимые для них скрипты
- *
- * @since      2.1.0
- * @package    pstu_faq
- * @subpackage pstu_faq/includes
- * @author     chomovva <chomovva@gmail.com>
- */
 class Control {
 
 
 	/**
-	 * Имя плагина
+	 * Имя плагина и слаг метаполей
 	 *
-	 * @since    2.1.0
+	 * @since    1.0.0
 	 * @access   private
 	 * @var      string    $plugin_name    Уникальный идентификтор плагина в контексте WP
 	 */
@@ -31,7 +23,7 @@ class Control {
 	/**
 	 * Версия плагина
 	 *
-	 * @since    2.1.0
+	 * @since    1.0.0
 	 * @access   private
 	 * @var      string    $version    Номер текущей версии плагина
 	 */
@@ -41,7 +33,7 @@ class Control {
 	/**
 	 * Инициализация класса и установка его свойства.
 	 *
-	 * @since    2.1.0
+	 * @since    1.0.0
 	 * @param    string    $plugin_name       Имя плагин и слаг метаполей
 	 * @param    string    $version           Текущая версия
 	 * @param    string    $plugin_name       Имя плагин и слаг метаполей
@@ -95,63 +87,26 @@ class Control {
 	}
 
 
-	/**
-	 * Формирует html-код выпадающего списка
-	 * @param  array  $choices           выринаты выбора ключ=>название
-	 * @param  array  $selected          выбранные элементы
-	 * @param  array  $atts              аттрибуты выпадающего списка
-	 * @param  string $show_option_none  что показывать в пустом элементе
-	 * @param  string $option_none_value значение пустого элемента
-	 * @return string                    html-код выпадающего списка
-	 */
-	public static function render_step_by_step_dropdown( $name, $choices = [], $selected = [], $atts = [], $show_option_none = '-', $option_none_value = '' ) {
+	public static function render_checkbox_group( $name, $choices = [], $checked = [] ) {
 		$html = '';
-		if ( ! is_array( $selected ) ) {
-			$selected = wp_parse_list( $selected );
+		if ( ! is_array( $checked ) ) {
+			$checked = [ $checked ];
 		}
-		if ( empty( $selected ) ) {
-			$data_selected = '[]';
-		} else {
-			$data_selected = wp_json_encode( array_map( function ( $item ) {
-				return array( 'value' => $selected );
-			}, $selected ) );
+		foreach ( $choices as $current => $label ) {
+			$atts = [
+				'name'    => $name . '[]',
+				'value'   => $current,
+			];
+			if ( in_array( $current, $checked ) ) {
+				$atts[ 'checked' ] = 'checked';
+			}
+			$html .= '<li><label class="checkbox">' . self::render_input( 'checkbox', $atts ) . ' ' . $label . '</label></li>';
 		}
-		if ( empty( $selected ) ) {
-			$data_choices = '[]';
-		} else {
-			$data_choices = wp_json_encode( array_map( function ( $item ) {
-				return array( 'value' => $selected );
-			}, $selected ) );
-		}
-		if ( is_array( $choices ) && ! empty( $choices ) ) {
-			$template = self::render_dropdown( [], '{{data.value.id}}', array_merge( [
-				'data-selected' => '{{data.value.id}}',
-				'class'  => 'form-control',
-				'id'     => $name . '-{{data.value.id}}',
-				'min'    => '1',
-				'name'   => $name . '[]',
-			], $atts ), $show_option_none, $option_none_value );
-			ob_start();
-			?>
-				<div class="step-by-step-dropdown" data-step-by-step-dropdown="<?php echo $name; ?>" >
-					<script type="text/javascript">
-						var <?php echo $name; ?>_data = <?php echo $data_selected; ?>;
-						var <?php echo $name; ?>_choices = <?php echo $data_choices; ?>;
-					</script>
-					<script type="text/html" id="tmpl-<?php echo $name; ?>">
-						<?php echo $template; ?>
-					</script>
-					<div class="list"></div>
-				</div>
-			<?
-			$html = ob_get_contents();
-			ob_end_clean();
-		}
-		return $html;
+		return ( empty( $html ) ) ? '' : '<ul class="list-inline">' . $html . '</ul>';
 	}
 
 
-	public static function render_radiogroup( $name, $choices = [], $checked = [] ) {
+	public static function render_radio_group( $name, $choices = [], $checked = [] ) {
 		$html = '';
 		if ( ! is_array( $checked ) ) {
 			$checked = [ $checked ];
@@ -162,7 +117,7 @@ class Control {
 				'value'   => $current,
 				'checked' => in_array( $current, $checked ),
 			];
-			$html .= '<label class="radio">' . self::render_input( $plugin_name, $version, 'radio', $atts ) . ' ' . $label . '</label>';
+			$html .= '<label class="radio">' . self::render_input( 'radio', $atts ) . ' ' . $label . '</label>';
 		}
 		return $html;
 	}
@@ -170,10 +125,9 @@ class Control {
 
 	/**
 	 * Формирует html-код элемента формы
-	 * @since    2.1.0
-	 * @param    string   $type   тип элемента формы
-	 * @param    array    $atts   аттрибуты тега элемента формы
-	 * @return   string           html-код
+	 * @param  string $type тип элемента формы
+	 * @param  array  $atts аттрибуты тега элемента формы
+	 * @return string       html-код
 	 */
 	public static function render_input( $type = 'text', $atts = [] ) {
 		return '<input type="' . $type . '" ' . self::render_atts( $atts ) . ' >';
@@ -182,17 +136,20 @@ class Control {
 
 	/**
 	 * Формирует html-код "сборного поля"
-	 * @since    2.1.0
-	 * @param    string   $plugin_name   идентификатор плагина
-	 * @param    string   $version       версия плагина
-	 * @param    array    $controls      массив с информацией об вложенных элементах формы
-	 * @param    array    $atts          массив оттрибутов
-	 * @return   string                  html-код
+	 * @param  string $plugin_name идентификатор плагина
+	 * @param  string $version     версия плагина
+	 * @param  array  $controls    массив с информацией об вложенных элементах формы
+	 * @param  array  $atts        массив оттрибутов
+	 * @return string              html-код
 	 */
 	public static function render_composite( $plugin_name, $version, $controls = [], $atts = [] ) {
 		$result = [];
-		foreach ( $controls as $type => $args ) {
-			$result[] = self::create_control( $plugin_name, $version, $type, $args );
+		foreach ( $controls as $control ) {
+			$control = array_merge( [
+				'type' => '',
+				'args' => [],
+			], $control );
+			$result[] = self::create_control( $plugin_name, $version, $control[ 'type' ], $control[ 'args' ] );
 		}
 		if ( ! array_key_exists( 'class', $atts ) ) {
 			$atts[ 'class' ] = '';
@@ -203,17 +160,77 @@ class Control {
 
 
 	/**
+	 * Формирует html-код галереи изображений
+	 * @param  string $plugin_name идентификатор плагина
+	 * @param  string $version     версия плагина
+	 * @param  string $template    шаблон для выода полей формы
+	 * @param  string $name        общее имя полей формы
+	 * @param  array  $value       значение полей формы
+	 * @param  array  $atts        массив дополнительных атриутов тега для обёртки
+	 * @return string              html-код
+	 */
+	public static function render_image_gallery( $plugin_name, $version, $name, $value = [], $atts = [] ) {
+		wp_enqueue_media();
+		add_thickbox();
+		$html = '';
+		if ( ! is_array( $value ) ) {
+			$value = wp_parse_list( $value );
+		}
+		$value = array_filter( array_map( function ( $attachment_id ) {
+			$thumbnauil_url = wp_get_attachment_image_url( $attachment_id, 'thumbnail', false );
+			$full_url = wp_get_attachment_image_url( $attachment_id, 'full', false );
+			return ( $thumbnauil_url && $full_url ) ? [
+				'id'   => $attachment_id,
+				'url'  => $thumbnauil_url,
+				'full' => $full_url,
+			] : null;
+		}, $value ) );
+		if ( empty( $value ) ) {
+			$data = '[]';
+		} else {
+			$data = wp_json_encode( $value );
+		}
+		ob_start();
+		?>
+			<div class="image-gallery" data-image-gallery="<?php echo $name; ?>" >
+				<script type="text/javascript">
+					var <?php echo $name; ?>_data = <?php echo $data; ?>;
+				</script>
+				<div class="images"></div>
+				<button  class="button button-primary add-button" type="button">
+					<?php _e( 'Выбрать изображения', $plugin_name ); ?>
+				</button>
+				<script type="text/html" id="tmpl-<?php echo $name; ?>">
+					<div class="gallery-item" data-image-id="{{data.id}}">
+						<input type="hidden" name="<?php echo $name; ?>[]" value="{{data.id}}">
+						<img src="{{data.url}}">
+						<a type="button" class="thickbox" href="#TB_inline?&width=600&inlineId=full-image-{{data.id}}">🔎</a>
+						<div id="full-image-{{data.id}}" style="display: none;">
+							<img class="image-gallery-full-size" src="{{data.full}}">
+						</div>
+						<button type="button" title="<?php esc_attr_e( 'Удалить', $plugin_name ); ?>" class="button remove-button">&times;</button>
+					</div>
+				</script>
+			</div>
+		<?
+		$html .= ob_get_contents();
+		ob_end_clean();
+		return $html;
+	}
+
+
+	/**
 	 * Формирует html-код динамического списка элементов формы
-	 * @since    2.1.0
-	 * @param    string   $plugin_name   идентификатор плагина
-	 * @param    string   $version       версия плагина
-	 * @param    string   $template      шаблон для выода полей формы
-	 * @param    string   $name          общее имя полей формы
-	 * @param    array    $value         значение полей формы
-	 * @param    array    $atts          массив дополнительных атриутов тега для обёртки
-	 * @return   string                  html-код
+	 * @param  string $plugin_name идентификатор плагина
+	 * @param  string $version     версия плагина
+	 * @param  string $template    шаблон для выода полей формы
+	 * @param  string $name        общее имя полей формы
+	 * @param  array  $value       значение полей формы
+	 * @param  array  $atts        массив дополнительных атриутов тега для обёртки
+	 * @return string              html-код
 	 */
 	public static function render_list( $plugin_name, $version, $template, $name, $value = [], $atts = [] ) {
+		$html = '';
 		if ( ! is_array( $value ) ) {
 			$value = wp_parse_list( $value );
 		}
@@ -247,7 +264,7 @@ class Control {
 					</script>
 				</div>
 			<?
-			$html = ob_get_contents();
+			$html .= ob_get_contents();
 			ob_end_clean();
 		}
 		return $html;
@@ -256,16 +273,19 @@ class Control {
 
 	/**
 	 * Общий метод для формирования элементов формы
-	 * @since    2.1.0
-	 * @param    string   $plugin_name   идегтификатор плагина
-	 * @param    string   $version       версия плагина
-	 * @param    string   $type          тип элемента формы
-	 * @param    array    $args          массив дополнительных аргументов элемента
-	 * @return   string                  html-код
+	 * @param  string $plugin_name идегтификатор плагина
+	 * @param  string $version     версия плагина
+	 * @param  string $type        тип элемента формы
+	 * @param  array  $args        массив дополнительных аргументов элемента
+	 * @return string              html-код
 	 */
 	public static function create_control( $plugin_name, $version, $type = '', $args = [] ) {
 		$result = '';
 		switch ( $type ) {
+
+			case 'gallery':
+				$result = self::render_image_gallery( $plugin_name, $version, $args[ 'name' ], $args[ 'value' ], $args[ 'atts' ] );
+				break;
 			
 			case 'list':
 				$args = array_merge( [
@@ -275,22 +295,6 @@ class Control {
 					'atts'     => [],
 				], $args );
 				$result = self::render_list( $plugin_name, $version, $args[ 'template' ], $args[ 'name' ], $args[ 'value' ], $args[ 'atts' ] );
-				break;
-
-			case 'radiogroup':
-				//
-				break;
-
-			case 'step_by_step_dropdown':
-				$args = array_merge( [
-					'name'     => 'name' . time(),
-					'atts'     => [],
-					'choices'  => [],
-					'selected' => [],
-					'show_option_none' => '-',
-					'option_none_value' => '',
-				], $args );
-				$result = self::render_step_by_step_dropdown( $args[ 'name' ], $args[ 'choices' ], $args[ 'selected' ], $args[ 'atts' ], $args[ 'show_option_none' ], $args[ 'option_none_value' ] );
 				break;
 
 			case 'dropdown':
@@ -345,9 +349,8 @@ class Control {
 
 	/**
 	 * Формирует html код аттрибутов элемента управления формы
-	 * @since    2.1.0
-	 * @param    array    $atts   ассоциативный массив аттрибут=>значение
-	 * @return   string           html-код
+	 * @param  array  $atts  ассоциативный массив аттрибут=>значение
+	 * @return string        html-код
 	 */
 	public static function render_atts( $atts ) {
 		$html = '';
@@ -362,15 +365,14 @@ class Control {
 
 	/**
 	 * Функция для очистки массива параметров
-	 * @since    2.1.0
-	 * @param    array   $default             расзерённые парметры и стандартные значения
-	 * @param    array   $args                неочищенные параметры
-	 * @param    array   $sanitize_callback   одномерный массив с именами функция, с помощью поторых нужно очистить параметры
-	 * @param    array   $required            обязательные параметры
-	 * @param    array   $not_empty           параметры которые не могут быть пустыми
-	 * @return   array                        возвращает ощиченный массив разрешённых параметров
+	 * @param  array $default           расзерённые парметры и стандартные значения
+	 * @param  array $args              неочищенные параметры
+	 * @param  array $sanitize_callback одномерный массив с именами функция, с помощью поторых нужно очистить параметры
+	 * @param  array $required          обязательные параметры
+	 * @param  array $not_empty         параметры которые не могут быть пустыми
+	 * @return array                    возвращает ощиченный массив разрешённых параметров
 	 */
-	public function parse_only_allowed_args( $default, $args, $sanitize_callback = [], $required = [], $not_empty = [] ) {
+	public static function parse_only_allowed_args( $default, $args, $sanitize_callback = [], $required = [], $not_empty = [] ) {
 		$args = ( array ) $args;
 		$result = [];
 		$count = 0;
@@ -398,7 +400,7 @@ class Control {
 
 	/**
 	 * Метод для отладки. Выводит информацию о переменной.
-	 * @since    2.1.0
+	 * @since    1.0.0
 	 * @param    mixed     $var переменная
 	 */
 	protected static function var_dump( $var ) {
@@ -410,7 +412,7 @@ class Control {
 
 	/**
 	 * Регистрирует стили для "части" плагина
-	 * @since    2.1.0
+	 * @since    2.0.0
 	 */
 	public function admin_enqueue_styles() {
 		wp_enqueue_style( "{$this->plugin_name}-control", plugin_dir_url( dirname( __FILE__ ) ) . 'admin/styles/admin-control.css', [], $this->version, 'all' );
@@ -419,7 +421,7 @@ class Control {
 
 	/**
 	 * Регистрирует скрипты для "части" плагина
-	 * @since    2.1.0
+	 * @since    2.0.0
 	 */
 	public function admin_enqueue_scripts() {
 		wp_enqueue_style( 'wp-color-picker' );
@@ -427,6 +429,29 @@ class Control {
 		wp_enqueue_style( 'jquery-ui', plugin_dir_url( dirname( __FILE__ ) ) . 'admin/styles/jquery-ui.css', [], '1.11.4', 'all' );
 		wp_enqueue_media();
 		wp_enqueue_script( "{$this->plugin_name}-control", plugin_dir_url( dirname( __FILE__ ) ) . 'admin/scripts/admin-control.js',  [ 'jquery', 'wp-color-picker' ], $this->version, false );
+	}
+
+
+	/**
+	 * Проверяет авляется ли массив ассоциативным
+	 * @param    array   $arr   массив для проверки
+	 * @return   bool           результат проверки
+	 * */
+	public static function is_assoc( $arr = [] ) {
+		if ( ! is_array( $arr ) ) {
+			return false;
+		}
+		return ( count( array_filter( array_keys( $arr ),'is_string' ) ) == count( $arr ) );
+	}
+
+
+	/**
+	 * Собирает со строки валидные email
+	 * @param    sting|array   $emails   неочщенная строка
+	 * @return   string                  строка с очищенными email
+	 * */
+	public static function parse_email_list( $emails = '' ) {
+		return implode( ", ", array_filter( array_map( 'sanitize_email', wp_parse_list( $emails ) ) ) );
 	}
 
 
