@@ -114,13 +114,13 @@ class PartPublicTaxonomyFAQCategory extends PartTaxonomyFAQCategory {
 			}
 			// проверка по чёрноме списку
 			if (
-				wp_check_comment_disallowed_list(
+				wp_blacklist_check(
 					$_SESSION[ 'question_form' ][ 'form_data' ][ 'name' ],
 					$_SESSION[ 'question_form' ][ 'form_data' ][ 'email' ],
 					'',
 					$_SESSION[ 'question_form' ][ 'form_data' ][ 'message' ],
 					$_SESSION[ 'question_form' ][ 'form_data' ][ 'user_ip' ],
-					''
+					isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : ''
 				)
 			) {
 				$_SESSION[ 'question_form' ][ 'warnings' ][] = 'spam';
